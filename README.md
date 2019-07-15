@@ -64,16 +64,53 @@ sns.boxplot(x = 'points', y = 'price', data = df)
 ```python
 sns.catplot(x = 'points', y = 'taster_name', data = df)
 ```
-TODO ADD GRAPH HERE
+![graph](\assests\tasterpoints.PNG)
 
-What other questions could you ask and answer by graphing this data?
+### 3. Lets look at a WordCloud of the `description` Text
 
-## Azure Tools and Data
-### Create Resource in Azure
-1. Go to [Azure Portal](https://portal.azure.com/) and login or [Create an Account](https://azure.microsoft.com/en-us/free/)
-2. Click "Create resource"
-3. Select "AI + Machine Learning" then "Machine Learning service workspace"
-4. Fill in required fields and select "Review + Create" then select "Create"
- </br> ![createamlresource][createamlresource]
-5. It will take a few minutes to create the resources needed for your workspace. Below is a list of all the resources that are created:
-</br> ![workspaceresourcelist][workspaceresourcelist]
+```python
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+text = df.description.values
+wordcloud = WordCloud(
+    width = 3000,
+    height = 2000,
+    background_color = 'black',
+    stopwords = STOPWORDS).generate(str(text))
+fig = plt.figure(
+    figsize = (40, 30),
+    facecolor = 'k',
+    edgecolor = 'k')
+plt.imshow(wordcloud, interpolation = 'bilinear')
+plt.axis('off')
+plt.tight_layout(pad=0)
+plt.show()
+```
+![graph](\assests\wordcloud.PNG)
+<small>I like to think of this WordCloud as a cheatsheet of discriptive words to use when tasting wine to make yourself sound like a wine expert :D</small>
+
+
+### What other questions could you ask and answer by graphing this data?
+![graph](\assests\dfhead.PNG)
+
+## Create Calculated Columns for Labels
+
+We are going to do a multi-classification for the price and points of the wines reviewed by the wine critics. Right now our points and price are a number feature*. We are going to create a couple functions to generate calculated columns based on the values in the points and price columns to use are our labels.
+
+<small>*NOTE: if we wanted to predict a specific price or point value we would want to build a regression model not a multi-classification. It really just depends on what your goal is</small>
+
+Function to return string quality based on points value.
+
+```python
+def getQuality(points):
+    if(points <= 85):
+        return 'bad'
+    elif(points<=90 ):
+        return 'ok'
+    elif(points<=95):
+        return 'good'
+    elif(points<=100):
+        return 'great'
+    else:
+        return 'If this gets hit, we did something wrong!'
+```
