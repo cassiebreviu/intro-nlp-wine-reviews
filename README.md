@@ -13,7 +13,6 @@ from sklearn.svm import LinearSVC, SVC
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import precision_recall_curve
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 ```
 
@@ -36,7 +35,11 @@ df = pd.read_csv(csv_file)
 df.head()
 ```
 ### Visualize the data
-1. Once we have the data its time to take a look at it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features)
+Once we have the data then its time to analyize it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong corrliation between different data points and help us answer questions about our data. Since our initial question was round predicting `Price` or `Quality` from the description we already know that our `feature` will be the `description` and our label will be `price` or `quality`. For fun, lets ask some questions about the data and answer them by graphing it with Seaborn.
+
+1. Is there a corrilation betwen
+
+
 
 
 ## Azure Tools and Data
