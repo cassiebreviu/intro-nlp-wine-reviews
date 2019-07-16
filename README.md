@@ -10,7 +10,7 @@ There are a few different ways to follow along on this tutorial:
 Once you are set with one of the above notebook environment configurations its time to start building!
 
 ## Import packages and data
-### Import the Packages
+### 1. Import the Packages
 ```python
 import pandas as pd
 import numpy as np
@@ -25,7 +25,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
 ```
 
-### We need Data!
+### 2. We need Data!
 ![data](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwvLv12Qt9SOXvdGwlqQP0ORHhvO1OI7hAxqAvXbf3tpRl4t2Isw)
 1. I used a dataset I found on Kaggle. Kaggle is an online community of data scientists. 
 2. Download the dataset from this repo or kaggle.
@@ -100,6 +100,7 @@ We are going to do a multi-classification for the price and points of the wines 
 ![graph](\imgs\dfinfo.PNG)
 
 <small>*NOTE: if we wanted to predict a specific price or point value we would want to build a regression model not a multi-classification. It really just depends on what your goal is</small>
+### Create Quality column from points of bad, ok, good, great.
 
 ### 1. Function to return string quality based on points value.
 
@@ -127,10 +128,54 @@ df['quality'] = df['points'].apply(getQuality)
 ```python
 sns.catplot(x = 'quality', y = 'price', data = df)
 ```
-![graph](\imgs\qualityprice.PNG)
+![graph](\imgs\pricequality.PNG)
 
 
 ```python
 sns.barplot(x = 'quality', y = 'price', data = df)
 ```
-![graph](\imgs\qualityprice2.PNG)
+![graph](\imgs\pricequality2.PNG)
+
+we now have quality buckets based on the points to use as a label class for our multi-classification model.
+
+### Create priceRange column from price column of `1-30`, `31-50`, `51-100`, `Above 100` and `0` for columns with NaN.
+
+### 1. Function to return string priceRange based on price value.
+
+```python
+def getPriceRange(price):
+    if(price <= 30):
+        return '1-30'
+    elif(price<=50):
+        return '31-50'
+    elif(price<=100): 
+        return '51-100'
+    elif(math.isnan(price)):
+        return '0'
+    else:
+        return 'Above 100'
+```
+### 2. Next lets apply the function to the points column of the dataframe and add a new column named `quality`.
+
+```python
+df['priceRange'] = df['price'].apply(getPriceRange)
+```
+
+### 3. Print totals for each priceRange assigned to see how the labels are distributed
+
+```python
+df.groupby(df['priceRange']).size()
+_____________________
+priceRange
+0             8996
+1-30         73455
+31-50        27746
+51-100       16408
+Above 100     3366
+dtype: int64
+```
+## We now have our labels for both model to predict quality and priceRange. Next we need to take our description text and process NLP with the library SciKitLearn to create a Bag-of-Words using the CountVectorizer functionality.
+
+
+
+TODO: I wonder if we had an additional feautre of the type of blend? Could that improve accuracy?
