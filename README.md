@@ -52,19 +52,19 @@ For fun, lets ask some questions about the data and answer them by graphing it w
 ```python
 sns.barplot(x = 'points', y = 'price', data = df)
 ```
-![graph](\assests\priceandpoints.PNG)
+![graph](\imgs\priceandpoints.PNG)
 
 ```python
 sns.boxplot(x = 'points', y = 'price', data = df)
 ```
-![graph](\assests\priceandpoints2.PNG)
+![graph](\imgs\priceandpoints2.PNG)
 
 ### 2. Does one wine critic give higher ratings than the others?
 
 ```python
 sns.catplot(x = 'points', y = 'taster_name', data = df)
 ```
-![graph](\assests\tasterpoints.PNG)
+![graph](\imgs\tasterpoints.PNG)
 
 ### 3. Lets look at a WordCloud of the `description` Text
 
@@ -86,20 +86,22 @@ plt.axis('off')
 plt.tight_layout(pad=0)
 plt.show()
 ```
-![graph](\assests\wordcloud.PNG)
+![graph](\imgs\wordcloud.PNG)
 <small>I like to think of this WordCloud as a cheatsheet of discriptive words to use when tasting wine to make yourself sound like a wine expert :D</small>
 
 
 ### What other questions could you ask and answer by graphing this data?
-![graph](\assests\dfhead.PNG)
+![graph](\imgs\dfhead.PNG)
 
 ## Create Calculated Columns for Labels
 
 We are going to do a multi-classification for the price and points of the wines reviewed by the wine critics. Right now our points and price are a number feature*. We are going to create a couple functions to generate calculated columns based on the values in the points and price columns to use are our labels.
 
+![graph](\imgs\dfinfo.PNG)
+
 <small>*NOTE: if we wanted to predict a specific price or point value we would want to build a regression model not a multi-classification. It really just depends on what your goal is</small>
 
-Function to return string quality based on points value.
+### 1. Function to return string quality based on points value.
 
 ```python
 def getQuality(points):
@@ -114,3 +116,21 @@ def getQuality(points):
     else:
         return 'If this gets hit, we did something wrong!'
 ```
+
+### 2. Next lets apply the function to the points column of the dataframe and add a new column named `quality`.
+
+```python
+df['quality'] = df['points'].apply(getQuality)
+```
+### 3. Lets visualize our new column against the price column like we did above.
+
+```python
+sns.catplot(x = 'quality', y = 'price', data = df)
+```
+![graph](\imgs\qualityprice.PNG)
+
+
+```python
+sns.barplot(x = 'quality', y = 'price', data = df)
+```
+![graph](\imgs\qualityprice2.PNG)
