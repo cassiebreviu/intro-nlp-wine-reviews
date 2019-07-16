@@ -1,4 +1,4 @@
-# Intro to NLP - Predict the Quality and Price of a Wine from a Wine Experts Description. Then deploy the model via Azure Functions.
+# Intro to NLP - Predict the Quality and Price of a Wine from a Wine Experts Description.
 A project to introduce you to a simple Bag of Words NLP using SciKit Learns and Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.
 
 ## Prerequisites
