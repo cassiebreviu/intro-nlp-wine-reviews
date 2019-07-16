@@ -327,7 +327,52 @@ Lets check the accuracy!
 accuracy = model.score(X_test, y_test)
 print ("Accuracy is {}".format(accuracy))
 ```
+---
+```python
+"Accuracy is 0.7404885554914407"
+```
+
+### 4. Time to test the model
+
+When you select a candidate model it should always be tested on unseen data. If a model is [overfitted](https://en.wikipedia.org/wiki/Overfitting) to its data it will perform really will on its own data and poorly on new data. This is why its very important to test on unseen data.
+
+I grabbed this review from the site. Its a 96 points and $60 bottle of wine review.
+
+```python
+test = "This comes from the producer's coolest estate near the town of Freestone. White pepper jumps from the glass alongside accents of lavender, rose and spice. Compelling in every way, it offers juicy raspberry fruit that's focused, pure and undeniably delicious."
+
+
+x = vectorizer.transform(np.array([test]))
+proba = model.predict_proba(x)
+classes = model.classes_
+resultdf = pd.DataFrame(data=proba, columns=classes)
+```
+
+Lets take a look at the results
+```python
+resultdf
+```
+![testresult](\imgs\testresult.PNG)
+
+## This is a correct prediction! 🎉 
+
+## Other things to try
+1. Change the label and run again for the price bucket prediction
+2. Try to use different algorithms to see if you can get a better result
+3. The original kaggle tried to predict varietal by the description. I think thats an even more fun test case than this!
+4. Add additional features to the description text to improve accuracy. There was a strong correlation between price and points. Maybe adding those would improve the accuracy score?
+5. Add lemmetization to the text to improve score using the [NLTK](https://www.nltk.org/)
+6. Try doing a text classification on a different dataset.
+
+Data science is a trial and error sport so this is just the beginning of possibilities with this dataset!
+
+
 
 TODO: I wonder if we had an additional feautre of the type of blend? Could that improve accuracy?
 
 TODO: build an app where you can type a description of a wine and it will predict the wuality and price of the wine. Host http request on azure functions in a vue mobile web app.
+
+## Other helpful links
+[The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice#the-machine-learning-algorithm-cheat-sheet)
+
+[How to choose algorithms for Azure Machine Learning Studio](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice)
