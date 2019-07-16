@@ -272,26 +272,61 @@ df['description'].iloc[0]
 
 The vector array (`[1 0 1 1 0]`) that represents the vectorization features (`['aromas', 'flavors', 'fruit', 'palate', 'wine']`) in first description in the corpus. 1 indicates its present and 0 indicates not present in the order of the vectorization features.
 
-Play around with different indexes of the vector and description. You will notice that there isn't lemmitzation so words like `fruity` and `fruits` are being ignored since only `fruit` is included in the vector and we didn't lemmitize the description to transform them into their root word.
+Play around with different indexes of the vector and description. You will notice that there isn't lemmatization so words like `fruity` and `fruits` are being ignored since only `fruit` is included in the vector and we didn't lemmatize the description to transform them into their root word.
 
-Each feature word is assigned a number so when w
+## Time to Train the Model
 
-
-
-
-
+### 1. Update the function so that the second vectorizer configuration is being used.
 
 ```python
-print(vectorizer.vocabulary_)
+def get_vector_feature_matrix(description):
+   def get_vector_feature_matrix(description):
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
+    vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5000)
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english",ngram_range=(1, 2), max_features=5000)
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english", tokenizer=stemming_tokenizer) 
+    vector = vectorizer.fit_transform(np.array(description))
+    return vector, vectorizer
 ```
----
+
+And call the function to update the vectorizer
+
 ```python
-{'aromas': 0, 'fruit': 2, 'palate': 3, 'wine': 4, 'flavors': 1}
+vector, vectorizer = get_vector_feature_matrix(df['description'])
 ```
 
+Now create our feature matrix
 
+```python
+features = vector.todense()
+```
+We have two different labels for two different models. Lets assign the label variable next and use the `quality` label first.
 
+```python
+label = df['quality'] 
+#label = df['priceRange']
+```
+## 2. We have the features and label variables created. Next we need to split the data to train and test. 
 
+We are going to use 80% to train and 20% to test. This will allow us to get an accuracy estimation from the training to see how the model is performing.
+
+```python
+X, y = features, label
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+```
+
+## 3. Train the model using a [LogisticRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) algorithm.
+
+```python
+lr = LogisticRegression(multi_class='ovr',solver='lbfgs')
+model = lr.fit(X_train, y_train)
+```
+Lets check the accuracy!
+
+```python
+accuracy = model.score(X_test, y_test)
+print ("Accuracy is {}".format(accuracy))
+```
 
 TODO: I wonder if we had an additional feautre of the type of blend? Could that improve accuracy?
 
