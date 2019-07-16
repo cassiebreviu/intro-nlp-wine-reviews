@@ -227,7 +227,7 @@ This returns the `vector` and the `vectorizer`. The `vectorizer` is what we appl
 ```python
 vector, vectorizer = get_vector_feature_matrix(df['description'])
 ```
-If we print the vectorizer we can see the current default parametners for it.
+If we print the vectorizer we can see the current default parameters for it.
 
 ```python
 print(vectorizer)
@@ -365,6 +365,9 @@ resultdf
 6. Try doing a text classification on a different dataset.
 
 Data science is a trial and error sport so this is just the beginning of possibilities with this dataset!
+
+TODO: this should prob be a separate blog
+# Save model and deploy to Azure Functions
 
 
 
