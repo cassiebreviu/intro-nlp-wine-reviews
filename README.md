@@ -180,10 +180,40 @@ The docs do a great job of explaining the CountVectorizer. I recommend reading t
 
 At a high level the CountVectorizer is taking the text of the description, removing stop words (such as “the”, “a”, “an”, “in”), creating a tokenization of the words and then creating a vector of numbers that represents the description. The text description is now represented as numbers with only the words we care about and can be processed by the computer to train a model. Remember the computer understand numbers and words can be represented as numbers so the computer can "understand".
 
+Before we jump into the CountVectorizer code and functionality. I want to list out a some terms and point out that CountVectorizer _does not_ do the Lemmetiization or Stemming for you.
+
+TODO: get descriptions for words
+* StopWords:
+* N-Gram:
+* Lemmetization:
+* Stemming:
+
+*NOTE: CountVectorizer doesn't do all of these things for you but does enough for simple models like this.
+
 Lets take a look at how we do this now.
 
+These are all the properties that you can set within the CountVectorizer. Many of them are defaulted or if set override other parts of the CountVectorizer. We are going to leave most of the defaults and then play with changing some of them to get better results for our model.
 
+```python
+CountVectorizer(input=’content’, encoding=’utf-8’, decode_error=’strict’, strip_accents=None, lowercase=True, preprocessor=None, tokenizer=None, stop_words=None, token_pattern='(?u)\b\w\w+\b', ngram_range=(1, 1), analyzer='word', max_df=1.0, min_df=1, max_features=None, vocabulary=None, binary=False, dtype=<class 'numpy.int64'>)
+```
+### Create the function to get the vector and vectorizer from the `description` feature.
+
+### 1.  
+
+```python
+def get_vector_feature_matrix(description):
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english")
+    vectorizer = CountVectorizer(lowercase=True, stop_words="english",ngram_range=(1, 2), max_features=20)
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english", tokenizer=stemming_tokenizer) 
+    vector = vectorizer.fit_transform(np.array(description))
+    return vector, vectorizer
+```
+# If the max_features and vocabulary is not None, build a vocabulary that only consider the top max_features ordered by term frequency across the corpus.
 
 
 
 TODO: I wonder if we had an additional feautre of the type of blend? Could that improve accuracy?
+
+TODO: build an app where you can type a description of a wine and it will predict the wuality and price of the wine. Host http request on azure functions in a vue mobile web app.
