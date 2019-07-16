@@ -266,8 +266,10 @@ print(vector.toarray()[0])
 df['description'].iloc[0]
 ```
 ---
+```python
 
-"`Aromas` include tropical `fruit`, broom, brimstone and dried herb. The `palate` isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity."
+"_Aromas_ include tropical _fruit_, broom, brimstone and dried herb. The _palate_ isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity."
+```
 
 The vector array (`[1 0 1 1 0]`) that represents the vectorization features (`['aromas', 'flavors', 'fruit', 'palate', 'wine']`) in first description in the corpus. 1 indicates its present and 0 indicates not present in the order of the vectorization features.
 
