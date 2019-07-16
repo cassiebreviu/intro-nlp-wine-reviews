@@ -52,19 +52,19 @@ For fun, lets ask some questions about the data and answer them by graphing it w
 ```python
 sns.barplot(x = 'points', y = 'price', data = df)
 ```
-![graph](\imgs\priceandpoints.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/priceandpoints.PNG)
 
 ```python
 sns.boxplot(x = 'points', y = 'price', data = df)
 ```
-![graph](\imgs\priceandpoints2.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/priceandpoints2.PNG)
 
 ### 2. Does one wine critic give higher ratings than the others?
 
 ```python
 sns.catplot(x = 'points', y = 'taster_name', data = df)
 ```
-![graph](\imgs\tasterpoints.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/tasterpoints.PNG)
 
 ### 3. Lets look at a WordCloud of the `description` Text
 
@@ -86,18 +86,18 @@ plt.axis('off')
 plt.tight_layout(pad=0)
 plt.show()
 ```
-![graph](\imgs\wordcloud.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/wordcloud.PNG)
 <small>I like to think of this WordCloud as a cheatsheet of discriptive words to use when tasting wine to make yourself sound like a wine expert :D</small>
 
 
 ### What other questions could you ask and answer by graphing this data?
-![graph](\imgs\dfhead.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/dfhead.PNG)
 
 ## Create Calculated Columns for Labels
 
 We are going to do a multi-classification for the price and points of the wines reviewed by the wine critics. Right now our points and price are a number feature*. We are going to create a couple functions to generate calculated columns based on the values in the points and price columns to use are our labels.
 
-![graph](\imgs\dfinfo.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/dfinfo.PNG)
 
 <small>*NOTE: if we wanted to predict a specific price or point value we would want to build a regression model not a multi-classification. It really just depends on what your goal is</small>
 ### Create Quality column from points of bad, ok, good, great.
@@ -128,13 +128,13 @@ df['quality'] = df['points'].apply(getQuality)
 ```python
 sns.catplot(x = 'quality', y = 'price', data = df)
 ```
-![graph](\imgs\pricequality.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/pricequality.PNG)
 
 
 ```python
 sns.barplot(x = 'quality', y = 'price', data = df)
 ```
-![graph](\imgs\pricequality2.PNG)
+![graph](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/pricequality2.PNG)
 
 we now have quality buckets based on the points to use as a label class for our multi-classification model.
 
@@ -352,7 +352,7 @@ Lets take a look at the results
 ```python
 resultdf
 ```
-![testresult](\imgs\testresult.PNG)
+![testresult](https://github.com/cassieview/intro-nlp-wine-reviews/blob/master/imgs/testresult.PNG)
 
 ## This is a correct prediction! 🎉 
 
