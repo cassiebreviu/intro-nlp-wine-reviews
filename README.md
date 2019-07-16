@@ -165,7 +165,9 @@ df['priceRange'] = df['price'].apply(getPriceRange)
 
 ```python
 df.groupby(df['priceRange']).size()
-_____________________
+```
+---
+```python
 priceRange
 0             8996
 1-30         73455
@@ -197,20 +199,91 @@ These are all the properties that you can set within the CountVectorizer. Many o
 ```python
 CountVectorizer(input=’content’, encoding=’utf-8’, decode_error=’strict’, strip_accents=None, lowercase=True, preprocessor=None, tokenizer=None, stop_words=None, token_pattern='(?u)\b\w\w+\b', ngram_range=(1, 1), analyzer='word', max_df=1.0, min_df=1, max_features=None, vocabulary=None, binary=False, dtype=<class 'numpy.int64'>)
 ```
-### Create the function to get the vector and vectorizer from the `description` feature.
+## Create the function to get the vector and vectorizer from the `description` feature.
 
-### 1.  
+### 1. There are different CountVectorizer configurations commented out so that we can play with different configs and see how it changes our result. Additionally this will help us look at one description and pick apart what is actually happening in the CountVectorizer.
 
 ```python
 def get_vector_feature_matrix(description):
+    vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
     #vectorizer = CountVectorizer(lowercase=True, stop_words="english")
-    vectorizer = CountVectorizer(lowercase=True, stop_words="english",ngram_range=(1, 2), max_features=20)
-    #vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english",ngram_range=(1, 2), max_features=20)
+
     #vectorizer = CountVectorizer(lowercase=True, stop_words="english", tokenizer=stemming_tokenizer) 
     vector = vectorizer.fit_transform(np.array(description))
     return vector, vectorizer
 ```
-# If the max_features and vocabulary is not None, build a vocabulary that only consider the top max_features ordered by term frequency across the corpus.
+
+### 2. For the first run we are going to have the below config. What this is saying is that we want to convert the text to lowercase, remove the english stopwords and we only want 5 words as feature tokens.
+
+```python
+vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
+```
+
+### 3. Next lets call our function and pass in the description column from the dataframe. 
+
+This returns the `vector` and the `vectorizer`. The `vectorizer` is what we apply to our text to create the number `vector` representation of our text so that the machine learning model can learn. Later we will save our `vectorizer` to a file so that it can be used again and again to create on next text data to classify data once we have our candidate model.
+
+```python
+vector, vectorizer = get_vector_feature_matrix(df['description'])
+```
+If we print the vectorizer we can see the current default parametners for it.
+
+```python
+print(vectorizer)
+```
+---
+```python
+CountVectorizer(analyzer='word', binary=False, decode_error='strict',
+        dtype=<class 'numpy.int64'>, encoding='utf-8', input='content',
+        lowercase=True, max_df=1.0, max_features=5, min_df=1,
+        ngram_range=(1, 1), preprocessor=None, stop_words='english',
+        strip_accents=None, token_pattern='(?u)\\b\\w\\w+\\b',
+        tokenizer=None, vocabulary=None)
+```
+### 4. Lets examine our variables and data to understand whats happening here.
+
+```python
+print(vectorizer.get_feature_names())
+```
+---
+```python
+['aromas', 'flavors', 'fruit', 'palate', 'wine']
+```
+Here we are getting the features of the vectorizer. Because we told the CountVectorizer to have a `max_feature = 5` it will build a vocabulary that only consider the top feature words ordered by term frequency across the corpus. This means that our `description` vectors would _only_ include these words when they are tokenized, all the other words would be ignored.
+
+Lets print out our first `description` and first `vector` to see this represented.
+
+```python
+print(vector.toarray()[0])
+```
+---
+```python
+[1 0 1 1 0]
+```
+
+```python
+df['description'].iloc[0]
+```
+---
+
+"`Aromas` include tropical `fruit`, broom, brimstone and dried herb. The `palate` isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity."
+
+The vector array (`[1 0 1 1 0]`) that represents the vectorization features (`['aromas', 'flavors', 'fruit', 'palate', 'wine']`) in first description in the corpus. 1 indicates its present and 0 indicates not present in the order of the vectorization features.
+
+
+
+
+
+```python
+print(vectorizer.vocabulary_)
+```
+---
+```python
+{'aromas': 0, 'fruit': 2, 'palate': 3, 'wine': 4, 'flavors': 1}
+```
+
+
 
 
 
