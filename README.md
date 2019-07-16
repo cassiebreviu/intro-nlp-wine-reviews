@@ -174,7 +174,15 @@ priceRange
 Above 100     3366
 dtype: int64
 ```
-## We now have our labels for both model to predict quality and priceRange. Next we need to take our description text and process NLP with the library SciKitLearn to create a Bag-of-Words using the CountVectorizer functionality.
+## We now have our labels for both models to predict quality and priceRange. Next we need to take our description text and process NLP with the library SciKitLearn to create a Bag-of-Words using the [CountVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html) functionality.
+
+The docs do a great job of explaining the CountVectorizer. I recommend reading through them to get a full understanding of whats going on, however I will go over some of the basics here.
+
+At a high level the CountVectorizer is taking the text of the description, removing stop words (such as “the”, “a”, “an”, “in”), creating a tokenization of the words and then creating a vector of numbers that represents the description. The text description is now represented as numbers with only the words we care about and can be processed by the computer to train a model. Remember the computer understand numbers and words can be represented as numbers so the computer can "understand".
+
+Lets take a look at how we do this now.
+
+
 
 
 
