@@ -378,6 +378,21 @@ topPrediction.head()
 
 Remember: Data science is a trial and error process. Keep thinking of ways to improve the model!
 
+# Model Persistance - Save model to disk
+
+```python
+# serialize the model on disk in the 'models' folder
+print ("Export the model")
+with open('models/model.pkl', 'wb') as fid:
+    dump(model, fid)
+    
+print ("Export the vect")
+with open('models/vect.pkl', 'wb') as fid:
+    dump(vectorizer, fid)
+```
+
+
+
 ## Other helpful links
 [The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice#the-machine-learning-algorithm-cheat-sheet)
 
