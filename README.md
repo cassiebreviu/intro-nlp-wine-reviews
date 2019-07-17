@@ -1,5 +1,6 @@
-# Intro to NLP - Predict the Quality and Price of a Wine from a Wine Experts Description.
-A project to introduce you to a simple Bag of Words NLP using SciKit Learns and Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.
+# Intro to NLP using SciKit Learn and Python
+### Can We Predict the Points Range, Price Range and Grape Variety of a Wine from a Wine Experts Description?
+A project to introduce you to a simple Bag of Words NLP using SciKit Learn and Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.
 
 ## Prerequisites
 There are a few different ways to follow along on this tutorial:
@@ -176,19 +177,19 @@ priceRange
 Above 100     3366
 dtype: int64
 ```
-## We now have our labels for both models to predict quality and priceRange. Next we need to take our description text and process NLP with the library SciKitLearn to create a Bag-of-Words using the [CountVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html) functionality.
+## We now have our labels for  models to predict quality, priceRange and grape variety. Next we need to take our description text and process NLP with the library SciKitLearn to create a Bag-of-Words using the [CountVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html) functionality.
 
 The docs do a great job of explaining the CountVectorizer. I recommend reading through them to get a full understanding of whats going on, however I will go over some of the basics here.
 
 At a high level the CountVectorizer is taking the text of the description, removing stop words (such as “the”, “a”, “an”, “in”), creating a tokenization of the words and then creating a vector of numbers that represents the description. The text description is now represented as numbers with only the words we care about and can be processed by the computer to train a model. Remember the computer understand numbers and words can be represented as numbers so the computer can "understand".
 
 Before we jump into the CountVectorizer code and functionality. I want to list out a some terms and point out that CountVectorizer _does not_ do the Lemmetiization or Stemming for you.
-
-TODO: get descriptions for words
-* StopWords:
-* N-Gram:
-* Lemmetization:
-* Stemming:
+ words
+* StopWords:  A stopword can be a word with meaning in a specific language. For example, in the English language, words such as "a," "and," "is," and "the" are left out of the full-text index since they are known to be useless to a search. A stopword can also be a token that does not have linguistic meaning.
+* [N-Gram](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/glossary#n-gram): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
+![ngram](/imgs/ngram.PNG)
+* [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview): converts multiple related words to a single canonical form (fruity fruitiness and fruits would all become fruit)
+* Stemming: Similar to Lemmatization but a bit more aggressive and can leave words fragmented.
 
 *NOTE: CountVectorizer doesn't do all of these things for you but does enough for simple models like this.
 
@@ -219,7 +220,10 @@ def get_vector_feature_matrix(description):
 ```python
 vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
 ```
-
+```python
+#remove rows with NaN values. 
+df = df.dropna()
+```
 ### 3. Next lets call our function and pass in the description column from the dataframe. 
 
 This returns the `vector` and the `vectorizer`. The `vectorizer` is what we apply to our text to create the number `vector` representation of our text so that the machine learning model can learn. Later we will save our `vectorizer` to a file so that it can be used again and again to create on next text data to classify data once we have our candidate model.
@@ -300,11 +304,12 @@ Now create our feature matrix
 ```python
 features = vector.todense()
 ```
-We have two different labels for two different models. Lets assign the label variable next and use the `quality` label first.
+We have three different labels for three different models. Lets assign the label variable next and use the `quality` label first.
 
 ```python
 label = df['quality'] 
 #label = df['priceRange']
+#label = df['variety']
 ```
 ## 2. We have the features and label variables created. Next we need to split the data to train and test. 
 
@@ -354,6 +359,13 @@ resultdf
 ```
 ![testresult](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/testresult.PNG)
 
+Another way to look at the result is to transpose, sort and then print the head resulting in a list of the top 5 predictions.
+
+```python
+topPrediction = resultdf.T.sort_values(by=[0], ascending = [False])
+topPrediction.head()
+```
+
 ## This is a correct prediction! 🎉 
 
 ## Other things to try
@@ -361,7 +373,7 @@ resultdf
 2. Try to use different algorithms to see if you can get a better result
 3. The original kaggle tried to predict varietal by the description. I think thats an even more fun test case than this!
 4. Add additional features to the description text to improve accuracy. There was a strong correlation between price and points. Maybe adding those would improve the accuracy score?
-5. Add lemmetization to the text to improve score using the [NLTK](https://www.nltk.org/)
+5. Add lemmatization to the text to improve score using the [NLTK](https://www.nltk.org/)
 6. Try doing a text classification on a different dataset.
 
 Data science is a trial and error sport so this is just the beginning of possibilities with this dataset!
@@ -371,7 +383,7 @@ TODO: this should prob be a separate blog
 
 
 
-TODO: I wonder if we had an additional feautre of the type of blend? Could that improve accuracy?
+TODO: I wonder if we had an additional feature of the type of blend? Could that improve accuracy?
 
 TODO: build an app where you can type a description of a wine and it will predict the wuality and price of the wine. Host http request on azure functions in a vue mobile web app.
 
