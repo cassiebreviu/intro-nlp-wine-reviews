@@ -376,16 +376,7 @@ topPrediction.head()
 5. Add lemmatization to the text to improve score using the [NLTK](https://www.nltk.org/)
 6. Try doing a text classification on a different dataset.
 
-Data science is a trial and error sport so this is just the beginning of possibilities with this dataset!
-
-TODO: this should prob be a separate blog
-# Save model and deploy to Azure Functions
-
-
-
-TODO: I wonder if we had an additional feature of the type of blend? Could that improve accuracy?
-
-TODO: build an app where you can type a description of a wine and it will predict the wuality and price of the wine. Host http request on azure functions in a vue mobile web app.
+Remember: Data science is a trial and error process. Keep thinking of ways to improve the model!
 
 ## Other helpful links
 [The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice#the-machine-learning-algorithm-cheat-sheet)
