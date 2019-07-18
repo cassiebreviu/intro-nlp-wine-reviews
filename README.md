@@ -3,10 +3,12 @@
 A project to introduce you to a simple Bag of Words NLP using SciKit Learn and Python. No previous machine learning knowledge required! You can use this same logic for document classification or any text classification problem you may be trying to solve.
 
 ## Prerequisites
-There are a few different ways to follow along on this tutorial:
+There are different ways to follow along on this tutorial, however the most simple option would probably be option 2!
+
 1. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
 2. [Azure Notebooks](https://notebooks.azure.com/) - an online Jupyter notebook that makes it easy to share and access your notebook from anywhere.
-3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. The notebook is included in the source for this tutorial. Additionally you will need [Anaconda](https://www.anaconda.com/distribution/) or Python installed to run the notebook locally.
+3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. Additionally you will need [Anaconda](https://www.anaconda.com/distribution/) or Python installed to run the notebook locally.
+4. Lastly you can run a Jupyter notebook kernal directly in VS Code. If you prefer to read through the tutorial and then run it in VS Code. [Download the source from GitHub](https://github.com/cassieview/intro-nlp-wine-reviews) and run the individual cells in the file `wine-prediction-train.py`. This python file does NOT have the detailed instructions that the Jupyter notebook has and this tutorial has. It has all the code in a script format vs notebook tutorial format.
 
 Once you are set with one of the above notebook environment configurations its time to start building!
 
