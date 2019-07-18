@@ -7,6 +7,9 @@ There are different ways to follow along on this tutorial, however the most simp
 
 1. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
 2. [Azure Notebooks](https://notebooks.azure.com/) - an online Jupyter notebook that makes it easy to share and access your notebook from anywhere.
+<a href="https://notebooks.azure.com/import/gh/cassieview/intro-nlp-wine-reviews/" rel="nofollow"><img src="https://camo.githubusercontent.com/ab66dca4176dde025befd337fd7d81efc879445e/68747470733a2f2f6e6f7465626f6f6b732e617a7572652e636f6d2f6c61756e63682e737667" alt="Azure Notebooks" data-canonical-src="https://notebooks.azure.com/launch.svg" style="max-width:100%;">
+</a>
+
 3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. Additionally you will need [Anaconda](https://www.anaconda.com/distribution/) or Python installed to run the notebook locally.
 4. Lastly you can run a Jupyter notebook kernal directly in VS Code. If you prefer to read through the tutorial and then run it in VS Code. [Download the source from GitHub](https://github.com/cassieview/intro-nlp-wine-reviews) and run the individual cells in the file `wine-prediction-train.py`. This python file does NOT have the detailed instructions that the Jupyter notebook has and this tutorial has. It has all the code in a script format vs notebook tutorial format.
 
