@@ -1,5 +1,5 @@
 # Intro to NLP using SciKit Learn and Python
-### Can We Predict the Points Range, Price Range and Grape Variety of a Wine from a Wine Experts Description?
+### Can we predict the points range, price range and grape variety of a wine from a wine experts description?
 A project to introduce you to a simple Bag of Words NLP using SciKit Learn and Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.
 
 ## Prerequisites
@@ -25,6 +25,7 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
 ```
+NOTE: If you get an error "No module named" install it with the command `!pip install joblib`. Replace `joblib`with the module name in the error message.
 
 ### 2. We need Data!
 ![data](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwvLv12Qt9SOXvdGwlqQP0ORHhvO1OI7hAxqAvXbf3tpRl4t2Isw)
