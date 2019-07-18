@@ -1,6 +1,6 @@
 # Intro to NLP using SciKit Learn and Python
 ### Can We Predict the Points Range, Price Range and Grape Variety of a Wine from a Wine Experts Description?
-A project to introduce you to a simple Bag of Words NLP using SciKit Learn and Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.
+A project to introduce you to a simple Bag of Words NLP using SciKit Learn and Python. You can use this same logic for document classification or any text classification problem you may be trying to solve.
 
 ## Prerequisites
 There are a few different ways to follow along on this tutorial:
