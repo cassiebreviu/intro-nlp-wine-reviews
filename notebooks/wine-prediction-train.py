@@ -1,34 +1,3 @@
-
-# Run the cell on line 28 first. This will import the modules and create the functions we will be calling in the init function.
-
-def __init__():
-#%% Load data and add calculated columns
-    df = loadData()
-    df['quality'] = df['points'].apply(getQuality)
-    df['priceRange'] = df['price'].apply(getPriceRange)
-    df.head()
-#%% Create vectorizer, features and label
-    vector, vectorizer = get_vector_feature_matrix(df['description'])
-    features = vector.todense()
-    label = df['quality'] 
-    #label = df['priceRange']
-    #label = df['variety']
-    print('Features and labels created')
-#%% Split Data
-    X, y = features, label
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-    print('Data Split')
-#%% Train Model
-    lr = LogisticRegression(multi_class='ovr',solver='lbfgs')
-    model = lr.fit(X_train, y_train)
-
-    accuracy = model.score(X_test, y_test)
-    print ("Model trained with a Accuracy of {}".format(accuracy))
-#%% Export model to file
-    exportFile('qualityModel',model)
-    exportFile('qualityVect', vectorizer)
-
-# Run this cell to create the below functions
 #%%
 ## import modules
 import pandas as pd
@@ -120,5 +89,30 @@ def loadFile(fileName, file):
 
 print('Functions created')
 
+#%% #Dont run this cell, its just here to break it off from the above cell
+def __init__():
+#%% Load data and add calculated columns
+    df = loadData()
+    df['quality'] = df['points'].apply(getQuality)
+    df['priceRange'] = df['price'].apply(getPriceRange)
+    df.head()
+#%% Create vectorizer, features and label
+    vector, vectorizer = get_vector_feature_matrix(df['description'])
+    features = vector.todense()
+    label = df['quality'] 
+    #label = df['priceRange']
+    #label = df['variety']
+    print('Features and labels created')
+#%% Split Data
+    X, y = features, label
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    print('Data Split')
+#%% Train Model
+    lr = LogisticRegression(multi_class='ovr',solver='lbfgs')
+    model = lr.fit(X_train, y_train)
 
-#%%
+    accuracy = model.score(X_test, y_test)
+    print ("Model trained with a Accuracy of {}".format(accuracy))
+#%% Export model to file
+    exportFile('qualityModel',model)
+    exportFile('qualityVect', vectorizer)
