@@ -13,7 +13,7 @@ from joblib import dump, load
 
 #### Create Functions ####
 def loadData():
-    csv_file = r"C:\Code\Demos\intro-nlp-wine-reviews\dataset\winemag-review.csv"
+    csv_file = "https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/dataset/winemag-review.csv"
 
     # Read csv file into dataframe
     df = pd.read_csv(csv_file)
