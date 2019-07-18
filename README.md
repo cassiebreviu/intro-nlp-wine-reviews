@@ -4,7 +4,7 @@ A project to introduce you to a simple Bag of Words NLP using SciKit Learn and P
 
 ## Prerequisites
 There are a few different ways to follow along on this tutorial:
-1. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
+1. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
 2. [Azure Notebooks](https://notebooks.azure.com/) - an online Jupyter notebook that makes it easy to share and access your notebook from anywhere.
 3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. The notebook is included in the source for this tutorial.
 
@@ -27,7 +27,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 ```
 NOTE: If you get an error "No module named" install it with the command `!pip install joblib`. Replace `joblib`with the module name in the error message.
 
-### 2. We need Data!
+### 2. We need data!
 ![data](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwvLv12Qt9SOXvdGwlqQP0ORHhvO1OI7hAxqAvXbf3tpRl4t2Isw)
 1. I used a dataset I found on Kaggle. Kaggle is an online community of data scientists. 
 2. Download the dataset from this repo or kaggle.
@@ -45,8 +45,11 @@ df = pd.read_csv(csv_file)
 # Print first 5 rows in the dataframe
 df.head()
 ```
+
+![graph](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/dfhead.PNG)
+
 ## Visualize the data
-Once we have the data then its time to analyize it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price` or `points` from the `description` we already know that our `feature` will be the `description` and our `label` will be `price` or `points`. 
+Once we have the data then its time to analyze it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features?WT.mc_id=github-blog-casiljan). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price` or `points` from the `description` we already know that our `feature` will be the `description` and our `label` will be `price` or `points`. 
 
 For fun, lets ask some questions about the data and answer them by graphing it with Seaborn.
 
@@ -187,9 +190,9 @@ At a high level the CountVectorizer is taking the text of the description, remov
 Before we jump into the CountVectorizer code and functionality. I want to list out a some terms and point out that CountVectorizer _does not_ do the Lemmetiization or Stemming for you.
  words
 * StopWords:  A stopword can be a word with meaning in a specific language. For example, in the English language, words such as "a," "and," "is," and "the" are left out of the full-text index since they are known to be useless to a search. A stopword can also be a token that does not have linguistic meaning.
-* [N-Gram](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/glossary#n-gram): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
+* [N-Gram](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/glossary#n-gram?WT.mc_id=github-blog-casiljan): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
 ![ngram](/imgs/ngram.PNG)
-* [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview): converts multiple related words to a single canonical form (fruity fruitiness and fruits would all become fruit)
+* [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview?WT.mc_id=github-blog-casiljan): converts multiple related words to a single canonical form (fruity fruitiness and fruits would all become fruit)
 * Stemming: Similar to Lemmatization but a bit more aggressive and can leave words fragmented.
 
 *NOTE: CountVectorizer doesn't do all of these things for you but does enough for simple models like this.
@@ -380,7 +383,7 @@ topPrediction.head()
 Remember: Data science is a trial and error process. Keep thinking of ways to improve the model!
 
 ## Other helpful links
-[The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice#the-machine-learning-algorithm-cheat-sheet)
+[The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice#the-machine-learning-algorithm-cheat-sheet?WT.mc_id=github-blog-casiljan)
 
-[How to choose algorithms for Azure Machine Learning Studio](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice)
+[How to choose algorithms for Azure Machine Learning Studio](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice?WT.mc_id=github-blog-casiljan)
 
