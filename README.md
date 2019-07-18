@@ -366,7 +366,7 @@ topPrediction = resultdf.T.sort_values(by=[0], ascending = [False])
 topPrediction.head()
 ```
 
-## This is a correct prediction! 🎉 
+# This is a correct prediction! 🎉 
 
 ## Other things to try
 1. Change the label and run again for the price bucket prediction
@@ -378,22 +378,8 @@ topPrediction.head()
 
 Remember: Data science is a trial and error process. Keep thinking of ways to improve the model!
 
-# Model Persistance - Save model to disk
-
-```python
-# serialize the model on disk in the 'models' folder
-print ("Export the model")
-with open('models/model.pkl', 'wb') as fid:
-    dump(model, fid)
-    
-print ("Export the vect")
-with open('models/vect.pkl', 'wb') as fid:
-    dump(vectorizer, fid)
-```
-
-
-
 ## Other helpful links
 [The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice#the-machine-learning-algorithm-cheat-sheet)
 
 [How to choose algorithms for Azure Machine Learning Studio](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice)
+
