@@ -6,7 +6,7 @@ A project to introduce you to a simple Bag of Words NLP using SciKit Learn and P
 There are a few different ways to follow along on this tutorial:
 1. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
 2. [Azure Notebooks](https://notebooks.azure.com/) - an online Jupyter notebook that makes it easy to share and access your notebook from anywhere.
-3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. The notebook is included in the source for this tutorial.
+3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. The notebook is included in the source for this tutorial. Additionally you will need [Anaconda](https://www.anaconda.com/distribution/) or Python installed to run the notebook locally.
 
 Once you are set with one of the above notebook environment configurations its time to start building!
 
@@ -19,11 +19,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import math
 from sklearn.model_selection import train_test_split
-from sklearn.svm import LinearSVC, SVC
-from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import precision_recall_curve
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
+from joblib import dump, load
 ```
 NOTE: If you get an error "No module named" install it with the command `!pip install joblib`. Replace `joblib` with the module name in the error message.
 
@@ -165,16 +164,14 @@ df['priceRange'] = df['price'].apply(getPriceRange)
 
 ```python
 df.groupby(df['priceRange']).size()
-```
----
-```python
-priceRange
-0             8996
-1-30         73455
-31-50        27746
-51-100       16408
-Above 100     3366
-dtype: int64
+
+Output: priceRange
+        0             8996
+        1-30         73455
+        31-50        27746
+        51-100       16408
+        Above 100     3366
+        dtype: int64
 ```
 ## We now have our labels for  models to predict quality, priceRange and grape variety. Next we need to take our description text and process NLP with the library SciKitLearn to create a Bag-of-Words using the [CountVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html) functionality.
 
@@ -182,11 +179,11 @@ The docs do a great job of explaining the CountVectorizer. I recommend reading t
 
 At a high level the CountVectorizer is taking the text of the description, removing stop words (such as “the”, “a”, “an”, “in”), creating a tokenization of the words and then creating a vector of numbers that represents the description. The text description is now represented as numbers with only the words we care about and can be processed by the computer to train a model. Remember the computer understand numbers and words can be represented as numbers so the computer can "understand".
 
-Before we jump into the CountVectorizer code and functionality. I want to list out some terms and point out that CountVectorizer _does not_ do the Lemmetiization or Stemming for you.
+Before we jump into the CountVectorizer code and functionality. I want to list out some terms and point out that CountVectorizer _does not_ do the Lemmatization or Stemming for you.
  
 * StopWords:  A stopword can be a word with meaning in a specific language. For example, in the English language, words such as "a," "and," "is," and "the" are left out of the full-text index since they are known to be useless to a search. A stopword can also be a token that does not have linguistic meaning.
 * [N-Gram](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/glossary#n-gram?WT.mc_id=github-blog-casiljan): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
-![ngram](/imgs/ngram.PNG)
+![ngram](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/ngram.PNG)
 * [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview?WT.mc_id=github-blog-casiljan): converts multiple related words to a single canonical form ("fruity", "fruitiness" and "fruits" would all become "fruit")
 * Stemming: Similar to Lemmatization but a bit more aggressive and can leave words fragmented.
 
@@ -232,10 +229,8 @@ If we print the vectorizer we can see the current default parameters for it.
 
 ```python
 print(vectorizer)
-```
----
-```python
-CountVectorizer(analyzer='word', binary=False, decode_error='strict',
+
+Output: CountVectorizer(analyzer='word', binary=False, decode_error='strict',
         dtype=<class 'numpy.int64'>, encoding='utf-8', input='content',
         lowercase=True, max_df=1.0, max_features=5, min_df=1,
         ngram_range=(1, 1), preprocessor=None, stop_words='english',
@@ -246,9 +241,7 @@ CountVectorizer(analyzer='word', binary=False, decode_error='strict',
 
 ```python
 print(vectorizer.get_feature_names())
-```
----
-```python
+Output:
 ['aromas', 'flavors', 'fruit', 'palate', 'wine']
 ```
 Here we are getting the features of the vectorizer. Because we told the CountVectorizer to have a `max_feature = 5` it will build a vocabulary that only consider the top feature words ordered by term frequency across the corpus. This means that our `description` vectors would _only_ include these words when they are tokenized, all the other words would be ignored.
@@ -257,18 +250,12 @@ Lets print out our first `description` and first `vector` to see this represente
 
 ```python
 print(vector.toarray()[0])
-```
----
-```python
-[1 0 1 1 0]
+Output: [1 0 1 1 0]
 ```
 
 ```python
 df['description'].iloc[0]
-```
----
-```python
-"_Aromas_ include tropical _fruit_, broom, brimstone and dried herb. The _palate_ isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity."
+Output: "_Aromas_ include tropical _fruit_, broom, brimstone and dried herb. The _palate_ isn't overly expressive, offering unripened apple, citrus and dried sage alongside brisk acidity."
 ```
 
 The vector array (`[1 0 1 1 0]`) that represents the vectorization features (`['aromas', 'flavors', 'fruit', 'palate', 'wine']`) in first description in the corpus. 1 indicates its present and 0 indicates not present in the order of the vectorization features.
@@ -277,7 +264,7 @@ Play around with different indexes of the vector and description. You will notic
 
 ## Time to Train the Model
 
-### 1. Update the function so that the second vectorizer configuration is being used.
+## 1. Update the function so that the second vectorizer configuration is being used.
 
 ```python
 def get_vector_feature_matrix(description):
@@ -328,10 +315,7 @@ Lets check the accuracy!
 ```python
 accuracy = model.score(X_test, y_test)
 print ("Accuracy is {}".format(accuracy))
-```
----
-```python
-"Accuracy is 0.7404885554914407"
+Output: "Accuracy is 0.7404885554914407"
 ```
 
 ### 4. Time to test the model
@@ -363,6 +347,7 @@ topPrediction = resultdf.T.sort_values(by=[0], ascending = [False])
 topPrediction.head()
 ```
 # This is a correct prediction! 🎉 
+However I am sure there are ways to improve this model and accuracy. Play around and see if you can get a better result!
 
 ## Other things to try
 1. Change the label and run again for the price bucket prediction or grape variety.
