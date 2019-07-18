@@ -25,7 +25,7 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
 ```
-NOTE: If you get an error "No module named" install it with the command `!pip install joblib`. Replace `joblib`with the module name in the error message.
+NOTE: If you get an error "No module named" install it with the command `!pip install joblib`. Replace `joblib` with the module name in the error message.
 
 ### 2. We need data!
 ![data](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwvLv12Qt9SOXvdGwlqQP0ORHhvO1OI7hAxqAvXbf3tpRl4t2Isw)
@@ -49,7 +49,7 @@ df.head()
 ![graph](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/dfhead.PNG)
 
 ## Visualize the data
-Once we have the data then its time to analyze it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features?WT.mc_id=github-blog-casiljan). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price` or `points` from the `description` we already know that our `feature` will be the `description` and our `label` will be `price` or `points`. 
+Once we have the data then its time to analyze it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features?WT.mc_id=github-blog-casiljan). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price`, `points` or `variety` from the `description` we already know that our `feature` will be the `description` and our `label` will be `price`, `points`or `variety`. Each prediction label will be a separate model so there will be three models in total if you build one for each label.
 
 For fun, lets ask some questions about the data and answer them by graphing it with Seaborn.
 
@@ -100,14 +100,11 @@ plt.show()
 
 ## Create Calculated Columns for Labels
 
-We are going to do a multi-classification for the price and points of the wines reviewed by the wine critics. Right now our points and price are a number feature*. We are going to create a couple functions to generate calculated columns based on the values in the points and price columns to use are our labels.
+We are going to do a multi-classification for the price and points of the wines reviewed by the wine critics. Right now our points and price are a number features. We are going to create a couple functions to generate calculated columns based on the values in the points and price columns to use as are our labels.
 
-![graph](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/dfinfo.PNG)
+If we wanted to predict a specific price or point value we would want to build a regression model not a multi-classification. It really just depends on what your goal is. We are looking at classification in this tutorial so we want to convert them to text features for classification.
 
-<small>*NOTE: if we wanted to predict a specific price or point value we would want to build a regression model not a multi-classification. It really just depends on what your goal is</small>
-### Create Quality column from points of bad, ok, good, great.
-
-### 1. Function to return string quality based on points value.
+### 1. Create `quality` column from points values to classes of bad, ok, good, great. Below is a function to return string `quality` based on the points value.
 
 ```python
 def getQuality(points):
@@ -143,9 +140,7 @@ sns.barplot(x = 'quality', y = 'price', data = df)
 
 we now have quality buckets based on the points to use as a label class for our multi-classification model.
 
-### Create priceRange column from price column of `1-30`, `31-50`, `51-100`, `Above 100` and `0` for columns with NaN.
-
-### 1. Function to return string priceRange based on price value.
+### 1. Create priceRange column from price column of `1-30`, `31-50`, `51-100`, `Above 100` and `0` for columns with NaN. Below is a function to return string priceRange based on price value.
 
 ```python
 def getPriceRange(price):
@@ -160,7 +155,7 @@ def getPriceRange(price):
     else:
         return 'Above 100'
 ```
-### 2. Next lets apply the function to the points column of the dataframe and add a new column named `quality`.
+### 2. Next lets apply the function to the points column of the dataframe and add a new column named `priceRange`.
 
 ```python
 df['priceRange'] = df['price'].apply(getPriceRange)
@@ -187,17 +182,15 @@ The docs do a great job of explaining the CountVectorizer. I recommend reading t
 
 At a high level the CountVectorizer is taking the text of the description, removing stop words (such as “the”, “a”, “an”, “in”), creating a tokenization of the words and then creating a vector of numbers that represents the description. The text description is now represented as numbers with only the words we care about and can be processed by the computer to train a model. Remember the computer understand numbers and words can be represented as numbers so the computer can "understand".
 
-Before we jump into the CountVectorizer code and functionality. I want to list out a some terms and point out that CountVectorizer _does not_ do the Lemmetiization or Stemming for you.
- words
+Before we jump into the CountVectorizer code and functionality. I want to list out some terms and point out that CountVectorizer _does not_ do the Lemmetiization or Stemming for you.
+ 
 * StopWords:  A stopword can be a word with meaning in a specific language. For example, in the English language, words such as "a," "and," "is," and "the" are left out of the full-text index since they are known to be useless to a search. A stopword can also be a token that does not have linguistic meaning.
 * [N-Gram](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/glossary#n-gram?WT.mc_id=github-blog-casiljan): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
 ![ngram](/imgs/ngram.PNG)
-* [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview?WT.mc_id=github-blog-casiljan): converts multiple related words to a single canonical form (fruity fruitiness and fruits would all become fruit)
+* [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview?WT.mc_id=github-blog-casiljan): converts multiple related words to a single canonical form ("fruity", "fruitiness" and "fruits" would all become "fruit")
 * Stemming: Similar to Lemmatization but a bit more aggressive and can leave words fragmented.
 
-*NOTE: CountVectorizer doesn't do all of these things for you but does enough for simple models like this.
-
-Lets take a look at how we do this now.
+### Lets take a look at how we do this now.
 
 These are all the properties that you can set within the CountVectorizer. Many of them are defaulted or if set override other parts of the CountVectorizer. We are going to leave most of the defaults and then play with changing some of them to get better results for our model.
 
@@ -225,12 +218,12 @@ def get_vector_feature_matrix(description):
 vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
 ```
 ```python
-#remove rows with NaN values. 
-df = df.dropna()
+#Optional: remove any rows with NaN values. 
+#df = df.dropna()
 ```
 ### 3. Next lets call our function and pass in the description column from the dataframe. 
 
-This returns the `vector` and the `vectorizer`. The `vectorizer` is what we apply to our text to create the number `vector` representation of our text so that the machine learning model can learn. Later we will save our `vectorizer` to a file so that it can be used again and again to create on next text data to classify data once we have our candidate model.
+This returns the `vector` and the `vectorizer`. The `vectorizer` is what we apply to our text to create the number `vector` representation of our text so that the machine learning model can learn.
 
 ```python
 vector, vectorizer = get_vector_feature_matrix(df['description'])
@@ -345,7 +338,7 @@ print ("Accuracy is {}".format(accuracy))
 
 When you select a candidate model it should always be tested on unseen data. If a model is [overfitted](https://en.wikipedia.org/wiki/Overfitting) to its data it will perform really will on its own data and poorly on new data. This is why its very important to test on unseen data.
 
-I grabbed this review from the site. Its a 96 points and $60 bottle of wine review.
+I grabbed this review from the wine mag site. Its a 96 points and $60 bottle of wine review.
 
 ```python
 test = "This comes from the producer's coolest estate near the town of Freestone. White pepper jumps from the glass alongside accents of lavender, rose and spice. Compelling in every way, it offers juicy raspberry fruit that's focused, pure and undeniably delicious."
@@ -369,16 +362,14 @@ Another way to look at the result is to transpose, sort and then print the head 
 topPrediction = resultdf.T.sort_values(by=[0], ascending = [False])
 topPrediction.head()
 ```
-
 # This is a correct prediction! 🎉 
 
 ## Other things to try
-1. Change the label and run again for the price bucket prediction
+1. Change the label and run again for the price bucket prediction or grape variety.
 2. Try to use different algorithms to see if you can get a better result
-3. The original kaggle tried to predict varietal by the description. I think thats an even more fun test case than this!
-4. Add additional features to the description text to improve accuracy. There was a strong correlation between price and points. Maybe adding those would improve the accuracy score?
-5. Add lemmatization to the text to improve score using the [NLTK](https://www.nltk.org/)
-6. Try doing a text classification on a different dataset.
+3. Add additional features to the description text to improve accuracy. There was a strong correlation between price and points. Maybe adding those would improve the accuracy score?
+4. Add lemmatization to the text to improve score using the [NLTK](https://www.nltk.org/)
+5. Try doing a text classification on a different dataset.
 
 Remember: Data science is a trial and error process. Keep thinking of ways to improve the model!
 
