@@ -20,7 +20,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             name = req_body.get('name')
 
     if name:
-                
+
         block_blob_service = BlockBlobService(account_name=ACCTNAME, account_key=ACCKEY)
         block_blob_service.get_blob_to_path('winemodels',MODELNAME,MODELNAME)
         block_blob_service.get_blob_to_path('winemodels',VECTNAME,VECTNAME)
