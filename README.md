@@ -24,9 +24,7 @@ Once you are set with one of the above notebook environment configurations its t
 ## Import packages and data
 ### 1. Import the Packages
 ```python
-#These two packages need to be installed first
-!pip install joblib
-!pip install seaborn==0.9.0
+#This package need to be installed first
 !pip install wordcloud
 ```
 ```python
