@@ -2,15 +2,22 @@
 ### Can we predict the points range, price range and grape variety of a wine from a wine experts description?
 A project to introduce you to a simple Bag of Words NLP using SciKit Learn and Python. No previous machine learning knowledge required! You can use this same logic for document classification or any text classification problem you may be trying to solve.
 
-## Prerequisites
-There are different ways to follow along on this tutorial, however the most simple option would probably be option 1!
+## Select one of the below options for setting up your Machine Learning environment. The first option is by far the simplest!
 
-1. [Azure Notebooks](https://notebooks.azure.com/) - an online Jupyter notebook that makes it easy to share and access your notebook from anywhere. If you click the button it will redirect you to Azure Notebooks where you can import the notebook directly from github into Azure Notebooks. You will need an [Azure account](https://azure.microsoft.com/en-us/free/) to do this! Once the repo is imported click the `winereview-nlp.ipynb` file to open the notebook.
-<a href="https://notebooks.azure.com/import/gh/cassieview/intro-nlp-wine-reviews/" rel="nofollow"><img src="https://camo.githubusercontent.com/ab66dca4176dde025befd337fd7d81efc879445e/68747470733a2f2f6e6f7465626f6f6b732e617a7572652e636f6d2f6c61756e63682e737667" alt="Azure Notebooks" data-canonical-src="https://notebooks.azure.com/launch.svg" style="max-width:100%;">
-</a>
-2. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
-3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. Additionally you will need [Anaconda](https://www.anaconda.com/distribution/) or Python installed to run the notebook locally.
-4. Lastly you can run a Jupyter notebook kernal directly in VS Code. If you prefer to read through the tutorial and then run it in VS Code. [Download the source from GitHub](https://github.com/cassieview/intro-nlp-wine-reviews) and run the individual cells in the file `wine-prediction-train.py`. This python file does NOT have the detailed instructions that the Jupyter notebook has and this tutorial has. It has all the code in a script format vs notebook tutorial format.
+* Use Azure Machine Learning Workspace with the integrated cloud Notebook VMs. Workspace gives you a LOT of functionality and I would highly recommend this.
+   * Create an [Azure account](https://azure.microsoft.com/en-us/free/) if you dont already have one.
+   * Follow the [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) tutorial through the "Create a notebook VM" step
+   * Click "Jupyter Lab" from the Notebook VM navigation
+   * Then run the below command in the terminal to clone the notebook from GitHub.
+
+<img src="https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/launchnotebook.png" width="800" height="500"/>
+
+```bash
+#CTRL+SHIFT+V to paste
+curl https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/winereview-nlp.ipynb --output winereview-nlp.ipynb
+```
+* [Download Jupyter](https://jupyter.org/) notebooks and run it locally. Additionally you will need [Anaconda](https://www.anaconda.com/distribution/) installed to run the notebook locally.
+* Lastly you can run a Jupyter notebook kernal directly in VS Code. If you prefer to read through the tutorial and then run it in VS Code. [Download the source from GitHub](https://github.com/cassieview/intro-nlp-wine-reviews) and run the individual cells in the file `wine-prediction-train.py`. This python file does NOT have the detailed instructions that the Jupyter notebook has and this tutorial has. It has all the code in a script format vs notebook tutorial format.
 
 Once you are set with one of the above notebook environment configurations its time to start building!
 
@@ -189,6 +196,10 @@ The docs do a great job of explaining the CountVectorizer. I recommend reading t
 
 At a high level the CountVectorizer is taking the text of the description, removing stop words (such as “the”, “a”, “an”, “in”), creating a tokenization of the words and then creating a vector of numbers that represents the description. The text description is now represented as numbers with only the words we care about and can be processed by the computer to train a model. Remember the computer understand numbers and words can be represented as numbers so the computer can "understand".
 
+This is an example of the words become numbers. We will go over this in more detail with an example from the dataset as well.
+
+![graph](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/vectorchart.PNG)
+
 Before we jump into the CountVectorizer code and functionality. I want to list out some terms and point out that CountVectorizer _does not_ do the Lemmatiization or Stemming for you.
  
 * StopWords:  A stopword can be a word with meaning in a specific language. For example, in the English language, words such as "a," "and," "is," and "the" are left out of the full-text index since they are known to be useless to a search. A stopword can also be a token that does not have linguistic meaning.
@@ -281,8 +292,8 @@ Play around with different indexes of the vector and description. You will notic
 def get_vector_feature_matrix(description):
    def get_vector_feature_matrix(description):
     #vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5)
-    vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=5000)
-    #vectorizer = CountVectorizer(lowercase=True, stop_words="english",ngram_range=(1, 2), max_features=5000)
+    vectorizer = CountVectorizer(lowercase=True, stop_words="english", max_features=1000)
+    #vectorizer = CountVectorizer(lowercase=True, stop_words="english",ngram_range=(1, 2), max_features=1000)
     #vectorizer = CountVectorizer(lowercase=True, stop_words="english", tokenizer=stemming_tokenizer) 
     vector = vectorizer.fit_transform(np.array(description))
     return vector, vectorizer
