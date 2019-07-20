@@ -3,13 +3,12 @@
 A project to introduce you to a simple Bag of Words NLP using SciKit Learn and Python. No previous machine learning knowledge required! You can use this same logic for document classification or any text classification problem you may be trying to solve.
 
 ## Prerequisites
-There are different ways to follow along on this tutorial, however the most simple option would probably be option 2!
+There are different ways to follow along on this tutorial, however the most simple option would probably be option 1!
 
-1. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
-2. [Azure Notebooks](https://notebooks.azure.com/) - an online Jupyter notebook that makes it easy to share and access your notebook from anywhere.
+1. [Azure Notebooks](https://notebooks.azure.com/) - an online Jupyter notebook that makes it easy to share and access your notebook from anywhere. If you click the button it will redirect you to Azure Notebooks where you can import the notebook directly from github into Azure Notebooks. You will need an [Azure account](https://azure.microsoft.com/en-us/free/) to do this! Once the repo is imported click the `winereview-nlp.ipynb` file to open the notebook.
 <a href="https://notebooks.azure.com/import/gh/cassieview/intro-nlp-wine-reviews/" rel="nofollow"><img src="https://camo.githubusercontent.com/ab66dca4176dde025befd337fd7d81efc879445e/68747470733a2f2f6e6f7465626f6f6b732e617a7572652e636f6d2f6c61756e63682e737667" alt="Azure Notebooks" data-canonical-src="https://notebooks.azure.com/launch.svg" style="max-width:100%;">
 </a>
-
+2. Create an [Azure account](https://azure.microsoft.com/en-us/free/) and [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) to use the Notebook VMs. This gives you a LOT of functionality and I would highly recommend this for models you plan to put in production.
 3. [Download Jupyter](https://jupyter.org/) notebooks and run it locally. Additionally you will need [Anaconda](https://www.anaconda.com/distribution/) or Python installed to run the notebook locally.
 4. Lastly you can run a Jupyter notebook kernal directly in VS Code. If you prefer to read through the tutorial and then run it in VS Code. [Download the source from GitHub](https://github.com/cassieview/intro-nlp-wine-reviews) and run the individual cells in the file `wine-prediction-train.py`. This python file does NOT have the detailed instructions that the Jupyter notebook has and this tutorial has. It has all the code in a script format vs notebook tutorial format.
 
@@ -17,6 +16,12 @@ Once you are set with one of the above notebook environment configurations its t
 
 ## Import packages and data
 ### 1. Import the Packages
+```python
+#These two packages need to be installed first
+!pip install joblib
+!pip install seaborn==0.9.0
+!pip install wordcloud
+```
 ```python
 import pandas as pd
 import numpy as np
@@ -35,7 +40,7 @@ NOTE: If you get an error "No module named" install it with the command `!pip in
 ![data](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwvLv12Qt9SOXvdGwlqQP0ORHhvO1OI7hAxqAvXbf3tpRl4t2Isw)
 1. I used a dataset I found on Kaggle. Kaggle is an online community of data scientists. 
 2. Download the dataset from this repo or kaggle.
-* [Wine Dataset from Repo](dataset/winemag-review.csv)
+* [Wine Dataset from Repo](https://github.com/cassieview/intro-nlp-wine-reviews/tree/master/dataset)
 * [Kaggle Dataset](https://www.kaggle.com/zynicide/wine-reviews)
 
 3. Import the data as a [Pandas](https://pandas.pydata.org/pandas-docs/stable/) DataFrame
@@ -53,7 +58,7 @@ df.head()
 ![graph](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/dfhead.PNG)
 
 ## Visualize the data
-Once we have the data then its time to analyze it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features?WT.mc_id=github-blog-casiljan). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price`, `points` or `variety` from the `description` we already know that our `feature` will be the `description` and our `label` will be `price`, `points`or `variety`. Each prediction label will be a separate model so there will be three models in total if you build one for each label.
+Once we have the data then its time to analyze it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features?WT.mc_id=github-blog-casiljan). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price`, `points` or `variety` from the `description` we already know that our Feature will be the `description` and our Label will be `price`, `points`or `variety`. Features are the data we use to make predictions and Labels are what we are predicting. Each label will be a separate model so there will be three models in total if you choose to build all three predictive models.
 
 For fun, lets ask some questions about the data and answer them by graphing it with Seaborn.
 
@@ -104,11 +109,11 @@ plt.show()
 
 ## Create Calculated Columns for Labels
 
-We are going to do a multi-classification for the price and points of the wines reviewed by the wine critics. Right now our points and price are a number features. We are going to create a couple functions to generate calculated columns based on the values in the points and price columns to use as are our labels.
+This is going to be multi-classification for the price points or grape variety of the wines reviewed by the wine critics. Right now our points and price are number features. This needs to be updated to a text feature category, to do this we will create a couple functions to generate calculated columns based on the values in the points and price columns to use as are our labels.
 
-If we wanted to predict a specific price or point value we would want to build a regression model not a multi-classification. It really just depends on what your goal is. We are looking at classification in this tutorial so we want to convert them to text features for classification.
+Create quality column from points values to classes of bad, ok, good, and great. Below is a function to return string quality based on the points value.
 
-### 1. Create `quality` column from points values to classes of bad, ok, good, great. Below is a function to return string `quality` based on the points value.
+### 1. Create `quality` column from points values to classes of bad, ok, good, and great. Below is a function to return string `quality` based on the points value.
 
 ```python
 def getQuality(points):
@@ -142,8 +147,6 @@ sns.barplot(x = 'quality', y = 'price', data = df)
 ```
 ![graph](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/pricequality2.PNG)
 
-we now have quality buckets based on the points to use as a label class for our multi-classification model.
-
 ### 1. Create priceRange column from price column of `1-30`, `31-50`, `51-100`, `Above 100` and `0` for columns with NaN. Below is a function to return string priceRange based on price value.
 
 ```python
@@ -159,7 +162,7 @@ def getPriceRange(price):
     else:
         return 'Above 100'
 ```
-### 2. Next lets apply the function to the points column of the dataframe and add a new column named `priceRange`.
+### 2. Apply the function to the points column of the dataframe and add a new column named `priceRange`.
 
 ```python
 df['priceRange'] = df['price'].apply(getPriceRange)
@@ -178,21 +181,24 @@ Output: priceRange
         Above 100     3366
         dtype: int64
 ```
-## We now have our labels for  models to predict quality, priceRange and grape variety. Next we need to take our description text and process NLP with the library SciKitLearn to create a Bag-of-Words using the [CountVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html) functionality.
+We now have our labels for  models to predict quality, priceRange and grape variety.
+
+## Process description text with the library SciKit Learn to create a Bag-of-Words using the [CountVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html) functionality.
 
 The docs do a great job of explaining the CountVectorizer. I recommend reading through them to get a full understanding of whats going on, however I will go over some of the basics here.
 
 At a high level the CountVectorizer is taking the text of the description, removing stop words (such as “the”, “a”, “an”, “in”), creating a tokenization of the words and then creating a vector of numbers that represents the description. The text description is now represented as numbers with only the words we care about and can be processed by the computer to train a model. Remember the computer understand numbers and words can be represented as numbers so the computer can "understand".
 
-Before we jump into the CountVectorizer code and functionality. I want to list out some terms and point out that CountVectorizer _does not_ do the Lemmatization or Stemming for you.
+Before we jump into the CountVectorizer code and functionality. I want to list out some terms and point out that CountVectorizer _does not_ do the Lemmatiization or Stemming for you.
  
 * StopWords:  A stopword can be a word with meaning in a specific language. For example, in the English language, words such as "a," "and," "is," and "the" are left out of the full-text index since they are known to be useless to a search. A stopword can also be a token that does not have linguistic meaning.
 * [N-Gram](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/glossary#n-gram?WT.mc_id=github-blog-casiljan): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
 ![ngram](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/ngram.PNG)
+
 * [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview?WT.mc_id=github-blog-casiljan): converts multiple related words to a single canonical form ("fruity", "fruitiness" and "fruits" would all become "fruit")
 * Stemming: Similar to Lemmatization but a bit more aggressive and can leave words fragmented.
 
-### Lets take a look at how we do this now.
+### Lets take a look at how to use the CountVectorizer.
 
 These are all the properties that you can set within the CountVectorizer. Many of them are defaulted or if set override other parts of the CountVectorizer. We are going to leave most of the defaults and then play with changing some of them to get better results for our model.
 
@@ -249,7 +255,7 @@ print(vectorizer.get_feature_names())
 Output:
 ['aromas', 'flavors', 'fruit', 'palate', 'wine']
 ```
-Here we are getting the features of the vectorizer. Because we told the CountVectorizer to have a `max_feature = 5` it will build a vocabulary that only consider the top feature words ordered by term frequency across the corpus. This means that our `description` vectors would _only_ include these words when they are tokenized, all the other words would be ignored.
+Here we are getting the features of the vectorizer. Because we told the CountVectorizer to have a `max_feature = 5` it will build a vocabulary that only considers the top feature words ordered by term frequency across the corpus. This means that our `description` vectors would _only_ include these words when they are tokenized, all the other words would be ignored.
 
 Lets print out our first `description` and first `vector` to see this represented.
 
@@ -267,9 +273,9 @@ The vector array (`[1 0 1 1 0]`) that represents the vectorization features (`['
 
 Play around with different indexes of the vector and description. You will notice that there isn't lemmatization so words like `fruity` and `fruits` are being ignored since only `fruit` is included in the vector and we didn't lemmatize the description to transform them into their root word.
 
-## Time to Train the Model
+## Train the Model
 
-## 1. Update the function so that the second vectorizer configuration is being used.
+### 1. Update the function so that the second vectorizer configuration is being used.
 
 ```python
 def get_vector_feature_matrix(description):
@@ -288,7 +294,7 @@ And call the function to update the vectorizer
 vector, vectorizer = get_vector_feature_matrix(df['description'])
 ```
 
-Now create our feature matrix
+Now create our feature matrix. If you get a MemoryError here reduce the max_features in the CountVectorizer.
 
 ```python
 features = vector.todense()
@@ -300,7 +306,7 @@ label = df['quality']
 #label = df['priceRange']
 #label = df['variety']
 ```
-## 2. We have the features and label variables created. Next we need to split the data to train and test. 
+### 2. We have the features and label variables created. Next we need to split the data to train and test. 
 
 We are going to use 80% to train and 20% to test. This will allow us to get an accuracy estimation from the training to see how the model is performing.
 
@@ -309,7 +315,7 @@ X, y = features, label
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 ```
 
-## 3. Train the model using a [LogisticRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) algorithm.
+### 3. Train the model using a [LogisticRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) algorithm.
 
 ```python
 lr = LogisticRegression(multi_class='ovr',solver='lbfgs')
@@ -323,7 +329,7 @@ print ("Accuracy is {}".format(accuracy))
 Output: "Accuracy is 0.7404885554914407"
 ```
 
-### 4. Time to test the model
+### 4. Test the model
 
 When you select a candidate model it should always be tested on unseen data. If a model is [overfitted](https://en.wikipedia.org/wiki/Overfitting) to its data it will perform really will on its own data and poorly on new data. This is why its very important to test on unseen data.
 
