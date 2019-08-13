@@ -30,7 +30,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         #print(trained_lr)
         #print(vectorizer)
 #%%
-        #name = "fruity awesomeness of all proptions. I like wine it tastes good."
+        #name = "fruity awesomeness"
         x = vectorizer.transform(np.array([name]))
         #result = trained_lr.predict(x)
     
