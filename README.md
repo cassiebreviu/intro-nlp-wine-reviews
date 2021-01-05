@@ -5,8 +5,8 @@ A project to introduce you to a simple Bag of Words NLP using SciKit Learn and P
 ## Select one of the below options for setting up your Machine Learning environment. The first option is by far the simplest!
 
 * Use Azure Machine Learning Workspace with the integrated cloud Notebook VMs. Workspace gives you a LOT of functionality and I would highly recommend this.
-   * Create an [Azure account](https://azure.microsoft.com/en-us/free/) if you dont already have one.
-   * Follow the [Create Workspace](https://docs.microsoft.com/en-us/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=github-blog-casiljan) tutorial through the "Create a notebook VM" step
+   * Create an [Azure account](https://azure.microsoft.com/free/?WT.mc_id=aiml-0000-cassieb) if you dont already have one.
+   * Follow the [Create Workspace](https://docs.microsoft.com/azure/machine-learning/service/quickstart-run-cloud-notebook?WT.mc_id=aiml-0000-cassieb) tutorial through the "Create a notebook VM" step
    * Click "Jupyter Lab" from the Notebook VM navigation
    * Then run the below command in the terminal to clone the notebook from GitHub.
 
@@ -63,7 +63,7 @@ df.head()
 ![graph](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/dfhead.PNG)
 
 ## Visualize the data
-Once we have the data then its time to analyze it and do some [Feature Selection and Engineering](https://docs.microsoft.com/en-us/azure/machine-learning/team-data-science-process/create-features?WT.mc_id=github-blog-casiljan). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price`, `points` or `variety` from the `description` we already know that our Feature will be the `description` and our Label will be `price`, `points`or `variety`. Features are the data we use to make predictions and Labels are what we are predicting. Each label will be a separate model so there will be three models in total if you choose to build all three predictive models.
+Once we have the data then its time to analyze it and do some [Feature Selection and Engineering](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/create-features?WT.mc_id=aiml-0000-cassieb). We will visualize our data using [Seaborn](https://seaborn.pydata.org/). This will allow us to see if there is a strong correlation between different data points and help us answer questions about our data. Since our initial question was around predicting `price`, `points` or `variety` from the `description` we already know that our Feature will be the `description` and our Label will be `price`, `points`or `variety`. Features are the data we use to make predictions and Labels are what we are predicting. Each label will be a separate model so there will be three models in total if you choose to build all three predictive models.
 
 For fun, lets ask some questions about the data and answer them by graphing it with Seaborn.
 
@@ -201,10 +201,10 @@ This is an example of the words become numbers. We will go over this in more det
 Before we jump into the CountVectorizer code and functionality. I want to list out some terms and point out that CountVectorizer _does not_ do the Lemmatiization or Stemming for you.
  
 * StopWords:  A stopword can be a word with meaning in a specific language. For example, in the English language, words such as "a," "and," "is," and "the" are left out of the full-text index since they are known to be useless to a search. A stopword can also be a token that does not have linguistic meaning.
-* [N-Gram](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/glossary#n-gram?WT.mc_id=github-blog-casiljan): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
+* [N-Gram](https://docs.microsoft.com/dotnet/machine-learning/resources/glossary?WT.mc_id=aiml-0000-cassieb#n-gram?WT.mc_id=github-blog-casiljan): A feature extraction scheme for text data: any sequence of N words turns into a feature value.
 ![ngram](https://raw.githubusercontent.com/cassieview/intro-nlp-wine-reviews/master/imgs/ngram.PNG)
 
-* [Lemmatization](https://docs.microsoft.com/en-us/azure/machine-learning/studio-module-reference/preprocess-text#module-overview?WT.mc_id=github-blog-casiljan): converts multiple related words to a single canonical form ("fruity", "fruitiness" and "fruits" would all become "fruit")
+* [Lemmatization](https://docs.microsoft.com/azure/machine-learning/studio-module-reference/preprocess-text?WT.mc_id=aiml-0000-cassieb#module-overview?WT.mc_id=github-blog-casiljan): converts multiple related words to a single canonical form ("fruity", "fruitiness" and "fruits" would all become "fruit")
 * Stemming: Similar to Lemmatization but a bit more aggressive and can leave words fragmented.
 
 ### Lets take a look at how to use the CountVectorizer.
@@ -379,7 +379,7 @@ However I am sure there are ways to improve this model and accuracy. Play around
 Remember: Data science is a trial and error process. Keep thinking of ways to improve the model!
 
 ## Other helpful links
-[The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice#the-machine-learning-algorithm-cheat-sheet?WT.mc_id=github-blog-casiljan)
+[The Machine Learning Algorithm Cheat Sheet](https://docs.microsoft.com/azure/machine-learning/studio/algorithm-choice?WT.mc_id=aiml-0000-cassieb#the-machine-learning-algorithm-cheat-sheet?WT.mc_id=github-blog-casiljan)
 
-[How to choose algorithms for Azure Machine Learning Studio](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-choice?WT.mc_id=github-blog-casiljan)
+[How to choose algorithms for Azure Machine Learning Studio](https://docs.microsoft.com/azure/machine-learning/studio/algorithm-choice?WT.mc_id=aiml-0000-cassieb)
 
